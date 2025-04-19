@@ -13,7 +13,7 @@ router.message.filter(
 
 @router.message(Command("balance"), StateFilter(None))
 async def start_for_admin(message: types.Message, state: FSMContext):
-    user = message.from_user.username
+    user = message.from_user.id
     if get_user_points(user) != None:
         await message.answer(
         text=f"Ваш баланс: {get_user_points(user)} баллов"
@@ -25,7 +25,7 @@ async def start_for_admin(message: types.Message, state: FSMContext):
 
 @router.message(Command("inventory"), StateFilter(None))
 async def start_for_admin(message: types.Message, state: FSMContext):
-    user = message.from_user.username
+    user = message.from_user.id
     list = "В вашем инвентаре:\n"
     for row in get_list_products_table(user):
         list += row + "\n"       

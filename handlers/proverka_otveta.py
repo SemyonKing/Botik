@@ -22,11 +22,11 @@ async def start_for_admin(message: types.Message):
                                           message_id=get_msg_id_questions_table(msg),
                                           text=f"{get_question_answer_questions_table(msg)}\nБаллов за ответ: {get_poins_questions_table(msg)}\n#найденОтвет Правильный ответ: {msg}")  
             
-            if get_bool_user_table(message.from_user.username):
-                  update_user_table(message.from_user.username, get_poins_questions_table(msg))                  
+            if get_bool_user_table(message.from_user.id):
+                  update_user_table(message.from_user.id, get_poins_questions_table(msg))                  
             else:
-                  insert_users_table(message.from_user.username,get_poins_questions_table(msg))
-            update_user_question_table(msg, message.from_user.username)
+                  insert_users_table(message.from_user.username, message.from_user.id, get_poins_questions_table(msg))
+            update_user_question_table(msg, message.from_user.id)
         
             
 

@@ -3,7 +3,7 @@ from aiogram.filters import Command, StateFilter
 from aiogram.fsm.context import FSMContext
 from aiogram.filters.state import StatesGroup, State
 from config import settings
-from queries.products_table import get_product_products_table, get_product_price_products_table
+from queries.products_table import get_product_id_products_table, get_product_products_table, get_product_price_products_table
 from queries.users_table import get_user_points, update_user_table
 from queries.list_products_table import insert_list_products_table, get_boolean_list_products_table
 
@@ -26,11 +26,15 @@ async def start_for_admin(message: types.Message, state: FSMContext):
 async def start_for_admin(message: types.Message, state: FSMContext):
     product = message.text.lower()
     if get_product_products_table(product):
-        if get_boolean_list_products_table(message.from_user.username, product) == False:
-            pointsPrice = int(get_user_points(message.from_user.username) + int(get_product_price_products_table(product) * -1))
+        if (get_boolean_list_products_table(get_product_id_products_table(product),message.from_user.id)):
+            await message.answer(
+            text="У вас уже есть такой продукт!"
+            ) 
+        else:
+            pointsPrice = int(get_user_points(message.from_user.id) + int(get_product_price_products_table(product) * -1))
             if pointsPrice >= 0:
-                insert_list_products_table(product, message.from_user.username)
-                update_user_table(message.from_user.username, int(get_product_price_products_table(product) * -1))
+                insert_list_products_table(get_product_id_products_table(product),message.from_user.id)
+                update_user_table(message.from_user.id, int(get_product_price_products_table(product) * -1))
                 await message.answer(
                 text="Продукт куплен!"
                 )
@@ -42,10 +46,7 @@ async def start_for_admin(message: types.Message, state: FSMContext):
                 await message.answer(
                 text=f"Вам не хватает: {pointsPrice * -1}"
                 )
-        else:
-            await message.answer(
-            text="У вас уже есть такой продукт!"
-            ) 
+            
     else:
         await message.answer(
         text="Такого продукта нет!"

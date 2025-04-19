@@ -43,3 +43,11 @@ def get_product_name_products_table(product: str):
             for row in conn.execute(querie):
                 return row[1] 
         except: return "null"
+
+def get_product_id_products_table(product: str):
+    with sync_engine.connect() as conn:
+        querie =  select(products_table.c.id).where(products_table.c.name == product)
+        try:
+            for row in conn.execute(querie):
+                return row[0] 
+        except: return None

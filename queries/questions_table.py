@@ -10,14 +10,14 @@ def insert_questions_table(message: int, vopros: str, otvet: str, ochkov: int):
                 answer = otvet,
                 points = ochkov,
                 resolved = False,
-                user = None
+                user_id = None
         )       
         conn.execute(querie)
         conn.commit()   
 
-def update_user_question_table(otvet: str, user: str):
+def update_user_question_table(otvet: str, user_id: int):
     with sync_engine.connect() as conn:
-        querie =  update(questions_table).where(questions_table.c.answer == otvet).values(resolved = True, user = user)
+        querie =  update(questions_table).where(questions_table.c.answer == otvet).values(resolved = True, user_id = user_id)
         conn.execute(querie)
         conn.commit() 
 
